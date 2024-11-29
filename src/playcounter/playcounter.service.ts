@@ -87,6 +87,7 @@ export class PlayerCounterService {
     return maxChunk;
   }
 
+  @LoggedFunction({ skipCallLog: true, skipReturnLog: true })
   async getChunk(
     chunkIdx: number,
     @InjectLogger logger: ScopedLogger,
