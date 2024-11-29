@@ -28,7 +28,8 @@ model Game {
 }
 
 model OutdatedGame {
-  app_id Int @id
+  app_id     Int      @id
+  added_time DateTime @default(now())
 }
 
 model PlayerCount {
