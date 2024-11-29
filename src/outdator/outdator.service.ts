@@ -175,7 +175,7 @@ export class OutdatorService {
     }
 
     const elapsedTime = performance.now() - startTime;
-    logger.log(`Outdator done in ${formatMs(round(elapsedTime, 2))}ms`);
+    logger.log(`Outdator done in ${formatMs(round(elapsedTime, 2))}`);
     this.running = false;
   }
 }

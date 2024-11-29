@@ -169,7 +169,7 @@ export class PlayerCounterService {
     await this.removeOldRecords(new Date(), logger);
 
     const elapsedTime = performance.now() - startTime;
-    logger.log(`playerCounter done in ${formatMs(round(elapsedTime, 2))}ms`);
+    logger.log(`playerCounter done in ${formatMs(round(elapsedTime, 2))}`);
     this.running = false;
   }
 
