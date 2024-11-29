@@ -30,10 +30,10 @@ export class PlayerCounterService {
     private db: PrismaService,
     private config: ConfigService,
   ) {
-    const appStateId = this.config.get<number>('APP_STATE_ID');
+    const appStateId = this.config.get<string>('APP_STATE_ID');
     if (!appStateId) throw new Error('APP_STATE_ID not set.');
 
-    this.appStateId = appStateId;
+    this.appStateId = parseInt(appStateId);
   }
 
   async getLastTime(@InjectLogger logger: ScopedLogger) {
