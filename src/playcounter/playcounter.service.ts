@@ -23,6 +23,7 @@ export class PlayerCounterService {
 
   constructor(private db: PrismaService) {}
 
+  @LoggedFunction({ skipCallLog: true, skipReturnLog: true })
   async getPlayerCount(
     appid: number,
     retryCount: number,
@@ -80,14 +81,12 @@ export class PlayerCounterService {
     };
   }
 
-  @LoggedFunction
   async getMaxChunk(@InjectLogger logger: ScopedLogger) {
     const maxChunk = Math.floor((await this.db.game.count()) / APP_PER_CHUNK);
     logger.log(`Max chunk is ${maxChunk}`);
     return maxChunk;
   }
 
-  @LoggedFunction
   async getChunk(
     chunkIdx: number,
     @InjectLogger logger: ScopedLogger,
@@ -103,7 +102,6 @@ export class PlayerCounterService {
     return chunk.map(({ app_id }) => app_id);
   }
 
-  @LoggedFunction
   @Cron('0 */30 * * * *')
   async playerCounter(@InjectLogger logger: ScopedLogger) {
     if (this.running) {

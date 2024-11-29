@@ -1,9 +1,4 @@
-import {
-  InjectLogger,
-  LoggedFunction,
-  LoggedInjectable,
-  ScopedLogger,
-} from 'nestlogged';
+import { InjectLogger, LoggedInjectable, ScopedLogger } from 'nestlogged';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
@@ -36,7 +31,6 @@ export class OutdatorService {
     this.appStateId = appStateId;
   }
 
-  @LoggedFunction
   private async getLastTime(
     @InjectLogger logger: ScopedLogger,
   ): Promise<Date | null> {
@@ -66,7 +60,6 @@ export class OutdatorService {
     return state.last_fetched_info;
   }
 
-  @LoggedFunction
   private async getAppListIteration(
     lastFetched: Date | null,
     lastAppId: number | null,
@@ -141,7 +134,6 @@ export class OutdatorService {
     return GetAppListData;
   }
 
-  @LoggedFunction
   @Cron('0 0 0 * * *')
   async outdator(@InjectLogger logger: ScopedLogger) {
     if (this.running) {
