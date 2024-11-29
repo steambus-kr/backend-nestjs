@@ -24,12 +24,12 @@ export class OutdatorService {
     private config: ConfigService,
   ) {
     const steamKey = this.config.get<string>('STEAM_KEY');
-    const appStateId = this.config.get<number>('APP_STATE_ID');
+    const appStateId = this.config.get<string>('APP_STATE_ID');
     if (!steamKey) throw new Error('STEAM_KEY not set.');
     if (!appStateId) throw new Error('APP_STATE_ID not set.');
 
     this.steamKey = steamKey;
-    this.appStateId = appStateId;
+    this.appStateId = parseInt(appStateId);
   }
 
   async getLastTime(@InjectLogger logger: ScopedLogger): Promise<Date | null> {
