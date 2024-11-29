@@ -19,11 +19,11 @@ import { calculateRatio, formatMs, round } from '../utility';
 import { Game } from '@prisma/client';
 
 const MAX_RETRY = 3;
-const MAX_CHUNK_PER_CALL = 6;
+const MAX_CHUNK_PER_CALL = 4;
 const APP_PER_CHUNK = 50;
 // 1H CALL
-// 300 APP PER 1H
-// 7200 APP PER 1D (max)
+// 200 APP PER 1H
+// 4800 APP PER 1D (max)
 const CHUNK_BETWEEN_DELAY = 5 * TIME.MINUTE;
 
 export function isKnownException(e: Error): boolean {
