@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PlaycounterService } from './playcounter.service';
+import { PlayerCounterService } from './playcounter.service';
+import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  providers: [PlaycounterService]
+  imports: [ConfigModule, ScheduleModule],
+  providers: [PlayerCounterService],
 })
 export class PlaycounterModule {}
