@@ -132,7 +132,11 @@ export class RecommendService {
           game.review_ratio ??
           calculateRatio(game.review_positive, game.review_negative),
       },
-      release_date: game.release_date,
+      release_date: game.release_date
+        ? new Intl.DateTimeFormat('ko', { dateStyle: 'medium' }).format(
+            new Date(game.release_date),
+          )
+        : '-',
       thumbnail_src: game.thumbnail_src,
       owner_min: game.owner_count,
       player_count: {
