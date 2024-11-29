@@ -146,6 +146,7 @@ export class OutdatorService {
       logger.warn(`Failed to start cron, already running`);
       return;
     }
+    this.running = true;
 
     const lastFetched = await this.getLastTime(logger);
 
@@ -176,5 +177,7 @@ export class OutdatorService {
         }),
       );
     }
+
+    this.running = false;
   }
 }
