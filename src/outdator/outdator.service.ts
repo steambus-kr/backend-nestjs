@@ -45,13 +45,6 @@ export class OutdatorService {
     });
 
     if (!state) {
-      logger.warn(`No state found, creating new one`);
-      const newState = {
-        id: this.appStateId,
-      };
-      await this.db.state.create({
-        data: newState,
-      });
       return null;
     }
 
@@ -176,11 +169,15 @@ export class OutdatorService {
     }
 
     try {
-      await this.db.state.update({
+      await this.db.state.upsert({
         where: {
           id: this.appStateId,
         },
-        data: {
+        update: {
+          last_fetched_info: startDate,
+        },
+        create: {
+          id: this.appStateId,
           last_fetched_info: startDate,
         },
       });
