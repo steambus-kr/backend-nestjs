@@ -32,9 +32,7 @@ export class OutdatorService {
     this.appStateId = appStateId;
   }
 
-  private async getLastTime(
-    @InjectLogger logger: ScopedLogger,
-  ): Promise<Date | null> {
+  async getLastTime(@InjectLogger logger: ScopedLogger): Promise<Date | null> {
     const state = await this.db.state.findUnique({
       where: {
         id: this.appStateId,
