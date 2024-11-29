@@ -6,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { PlayerCounterService } from './playcounter.service';
 import { InjectLogger, ScopedLogger } from 'nestlogged';
 import { TIME } from '../constant';
@@ -15,7 +14,6 @@ import { TIME } from '../constant';
 export class PlaycounterController {
   constructor(
     private config: ConfigService,
-    private schedulerRegistry: SchedulerRegistry,
     private service: PlayerCounterService,
   ) {}
 
@@ -23,7 +21,7 @@ export class PlaycounterController {
   async dispatch(@Headers('X-ADMIN-KEY') key: string) {
     if (!key || key !== this.config.get<string>('ADMIN_KEY'))
       throw new UnauthorizedException();
-    this.schedulerRegistry.getCronJob('playerCounter').start();
+    void this.service.playerCounter(undefined as unknown as ScopedLogger);
     return {
       ok: true,
     };
