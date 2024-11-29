@@ -423,7 +423,7 @@ export class UpdatorService {
         }),
       );
       logger.log(
-        `Chunk ${i} / ${maxChunk} done (${Math.round((i / maxChunk) * 100)}%), ${chunkStatus.success} games updated
+        `Chunk ${i + 1} / ${maxChunk} done (${Math.round(((i + 1) / maxChunk) * 100)}%), ${chunkStatus.success} games updated
         ${JSON.stringify(chunkStatus, null, 2)}`,
       );
     }
