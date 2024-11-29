@@ -11,8 +11,14 @@ ALTER TABLE `_GameToGenre` DROP FOREIGN KEY `_GameToGenre_B_fkey`;
 
 -- AlterTable
 ALTER TABLE `Genre` DROP PRIMARY KEY,
-    ADD COLUMN `genre_id` INTEGER NOT NULL,
+    ADD COLUMN `genre_id` INTEGER NOT NULL AUTO_INCREMENT,
     ADD PRIMARY KEY (`genre_id`);
+
+-- Update
+UPDATE _GameToGenre g JOIN Genre gn ON g.B = gn.genre_name SET g.B = gn.genre_id;
+
+-- AlterTable
+ALTER TABLE `Genre` MODIFY `genre_id` INTEGER NOT NULL;
 
 -- AlterTable
 ALTER TABLE `_GameToGenre` MODIFY `B` INTEGER NOT NULL;
