@@ -135,7 +135,7 @@ export class OutdatorService {
     return GetAppListData;
   }
 
-  @Cron('0 0 0 * * *')
+  @Cron('0 0 0 * * *', { name: 'outdator', timeZone: 'Asia/Seoul' })
   async outdator(@InjectLogger logger: ScopedLogger) {
     if (this.running) {
       logger.warn(`Failed to start cron, already running`);
