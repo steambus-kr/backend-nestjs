@@ -4,7 +4,7 @@ import {
   LoggedInjectable,
   ScopedLogger,
 } from 'nestlogged';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { MaxRetryException } from '../exceptions/maxretry.exception';
 import { STEAM_RATE_LIMIT_COOLDOWN } from '../constant';
 import { FetchException } from '../exceptions/fetch.exception';

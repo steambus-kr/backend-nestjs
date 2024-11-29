@@ -4,7 +4,7 @@ import {
   LoggedInjectable,
   ScopedLogger,
 } from 'nestlogged';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { STEAM_RATE_LIMIT_COOLDOWN } from '../constant';
