@@ -18,7 +18,7 @@ model Game {
   title           String        @db.TinyText
   description     String        @db.Text
   owner_count     Int
-  release_date    String
+  release_date    DateTime?
   genres          Genre[]
   player_count    PlayerCount[]
   thumbnail_src   String
