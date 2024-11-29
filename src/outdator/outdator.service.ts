@@ -174,6 +174,19 @@ export class OutdatorService {
       );
     }
 
+    try {
+      await this.db.state.update({
+        where: {
+          id: this.appStateId,
+        },
+        data: {
+          last_fetched_info: new Date(),
+        },
+      });
+    } catch (e) {
+      logger.error(`Failed to update state:\n${e}`);
+    }
+
     const elapsedTime = performance.now() - startTime;
     logger.log(`Outdator done in ${formatMs(round(elapsedTime, 2))}`);
     this.running = false;
