@@ -172,6 +172,19 @@ export class PlayerCounterService {
 
     await this.removeOldRecords(new Date(), logger);
 
+    try {
+      await this.db.state.update({
+        where: {
+          id: 1,
+        },
+        data: {
+          last_fetched_pc: new Date(),
+        },
+      });
+    } catch (e) {
+      logger.error(`Failed to update state:\n${e}`);
+    }
+
     const elapsedTime = performance.now() - startTime;
     logger.log(`playerCounter done in ${formatMs(round(elapsedTime, 2))}`);
     this.running = false;
