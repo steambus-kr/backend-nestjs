@@ -6,7 +6,7 @@ import {
 } from 'nestlogged';
 import { PrismaService } from '../prisma/prisma.service';
 import { MaxRetryException } from '../exceptions/maxretry.exception';
-import { STEAM_RATE_LIMIT_COOLDOWN } from '../constant';
+import { STEAM_RATE_LIMIT_COOLDOWN, TIME } from '../constant';
 import { FetchException } from '../exceptions/fetch.exception';
 import { IPlayerCountResponse } from './types/playercount.interface';
 import { JsonException } from '../exceptions/json.exception';
@@ -163,6 +163,19 @@ export class PlayerCounterService {
       `Successfully done, ${maxChunk} chunk saved
       ${JSON.stringify(status, null, 2)}`,
     );
+
+    await this.removeOldRecords(new Date(), logger);
     this.running = false;
+  }
+
+  async removeOldRecords(baseDate: Date, @InjectLogger logger: ScopedLogger) {
+    const deletedCount = await this.db.playerCount.deleteMany({
+      where: {
+        date: {
+          lte: new Date(baseDate.getTime() - TIME.DAY),
+        },
+      },
+    });
+    logger.log(`Deleted ${deletedCount.count} records`);
   }
 }
