@@ -59,6 +59,9 @@ export class UpdatorService {
         select: {
           app_id: true,
         },
+        orderBy: {
+          added_time: 'asc', // older first
+        },
         skip: idx * APP_PER_CHUNK,
         take: APP_PER_CHUNK,
       })

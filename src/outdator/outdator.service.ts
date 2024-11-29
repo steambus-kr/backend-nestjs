@@ -160,6 +160,7 @@ export class OutdatorService {
             },
             update: {
               app_id: appid,
+              added_time: new Date(),
             },
           });
         }),
