@@ -13,6 +13,7 @@ import { JsonException } from '../exceptions/json.exception';
 import { ISteamUserStats } from './types/steamuserstat.interface';
 import { BodyFailException } from '../exceptions/bodyfail.exception';
 import { Cron } from '@nestjs/schedule';
+import { formatMs, round } from '../utility';
 
 const MAX_RETRY = 3;
 const APP_PER_CHUNK = 200;
@@ -110,6 +111,7 @@ export class PlayerCounterService {
       return;
     }
     this.running = true;
+    const startTime = performance.now();
 
     const date = new Date();
     const maxChunk = await this.getMaxChunk(logger);
@@ -165,6 +167,9 @@ export class PlayerCounterService {
     );
 
     await this.removeOldRecords(new Date(), logger);
+
+    const elapsedTime = performance.now() - startTime;
+    logger.log(`playerCounter done in ${formatMs(round(elapsedTime, 2))}ms`);
     this.running = false;
   }
 

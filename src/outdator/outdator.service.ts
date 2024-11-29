@@ -7,6 +7,7 @@ import { MaxRetryException } from '../exceptions/maxretry.exception';
 import { FetchException } from '../exceptions/fetch.exception';
 import { IGetAppList } from './types/getapplist.interface';
 import { JsonException } from '../exceptions/json.exception';
+import { formatMs, round } from '../utility';
 
 const MAX_RETRY = 3;
 
@@ -141,6 +142,7 @@ export class OutdatorService {
       return;
     }
     this.running = true;
+    const startTime = performance.now();
 
     const lastFetched = await this.getLastTime(logger);
 
@@ -172,6 +174,8 @@ export class OutdatorService {
       );
     }
 
+    const elapsedTime = performance.now() - startTime;
+    logger.log(`Outdator done in ${formatMs(round(elapsedTime, 2))}ms`);
     this.running = false;
   }
 }
