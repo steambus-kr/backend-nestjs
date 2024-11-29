@@ -23,7 +23,6 @@ export class PlayerCounterService {
 
   constructor(private db: PrismaService) {}
 
-  @LoggedFunction
   async getPlayerCount(
     appid: number,
     retryCount: number,
