@@ -14,6 +14,7 @@ import { ISteamUserStats } from './types/steamuserstat.interface';
 import { BodyFailException } from '../exceptions/bodyfail.exception';
 import { Cron } from '@nestjs/schedule';
 import { formatMs, round } from '../utility';
+import { ConfigService } from '@nestjs/config';
 
 const MAX_RETRY = 3;
 const APP_PER_CHUNK = 200;
@@ -22,7 +23,38 @@ const APP_PER_CHUNK = 200;
 export class PlayerCounterService {
   running: boolean = false;
 
-  constructor(private db: PrismaService) {}
+  /* env */
+  appStateId: number;
+
+  constructor(
+    private db: PrismaService,
+    private config: ConfigService,
+  ) {
+    const appStateId = this.config.get<number>('APP_STATE_ID');
+    if (!appStateId) throw new Error('APP_STATE_ID not set.');
+
+    this.appStateId = appStateId;
+  }
+
+  async getLastTime(@InjectLogger logger: ScopedLogger) {
+    const state = await this.db.state.findUnique({
+      where: {
+        id: this.appStateId,
+      },
+      select: {
+        last_fetched_pc: true,
+      },
+    });
+
+    if (!state) {
+      return null;
+    }
+
+    logger.log(
+      `State found, last_fetched_pc=${state.last_fetched_pc ? state.last_fetched_pc.getTime() : 'null'}`,
+    );
+    return state.last_fetched_pc;
+  }
 
   @LoggedFunction({ skipCallLog: true, skipReturnLog: true })
   async getPlayerCount(
@@ -108,7 +140,10 @@ export class PlayerCounterService {
     return chunk.map(({ app_id }) => app_id);
   }
 
-  @Cron('0 */30 * * * *')
+  @Cron('0 */30 * * * *', {
+    name: 'playerCounter',
+    timeZone: 'Asia/Seoul',
+  })
   async playerCounter(@InjectLogger logger: ScopedLogger) {
     if (this.running) {
       logger.warn(`Failed to start cron, already running`);
