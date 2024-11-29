@@ -4,7 +4,6 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectLogger, LoggedController, ScopedLogger } from 'nestlogged';
 import { OutdatorService } from './outdator.service';
 import { TIME } from '../constant';
@@ -14,7 +13,6 @@ import { ConfigService } from '@nestjs/config';
 export class OutdatorController {
   constructor(
     private config: ConfigService,
-    private schedulerRegistry: SchedulerRegistry,
     private service: OutdatorService,
   ) {}
 
@@ -22,7 +20,7 @@ export class OutdatorController {
   async dispatch(@Headers('X-ADMIN-KEY') key: string) {
     if (!key || key !== this.config.get<string>('ADMIN_KEY'))
       throw new UnauthorizedException();
-    this.schedulerRegistry.getCronJob('outdator').start();
+    void this.service.outdator(undefined as unknown as ScopedLogger);
     return {
       ok: true,
     };
