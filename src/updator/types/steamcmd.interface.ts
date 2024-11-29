@@ -1,4 +1,10 @@
-export interface ISteamCMDBody {
+export interface ISteamCMDBody<N extends number> {
   success: boolean;
-  data: Record<number, { common: { steam_release_date?: `${number}` } }>;
+  data: {
+    [K in N]: ISteamCMDData;
+  };
+}
+
+export interface ISteamCMDData {
+  common: { steam_release_date?: `${number}` };
 }
