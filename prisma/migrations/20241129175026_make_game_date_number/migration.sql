@@ -5,8 +5,10 @@
 
 */
 
+-- AlterTable
 ALTER TABLE `Game` MODIFY `release_date` VarChar(191) NULL;
 
+-- Update
 UPDATE `Game` SET `release_date`=NULL;
 
 -- AlterTable

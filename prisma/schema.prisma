@@ -42,6 +42,7 @@ model PlayerCount {
 }
 
 model Genre {
-  genre_name String @id
+  genre_id   Int    @id
+  genre_name String
   games      Game[]
 }
