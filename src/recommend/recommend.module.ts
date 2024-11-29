@@ -4,7 +4,8 @@ import { RecommendController } from './recommend.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  providers: [RecommendService, PrismaModule],
+  imports: [PrismaModule],
+  providers: [RecommendService],
   controllers: [RecommendController],
 })
 export class RecommendModule {}
