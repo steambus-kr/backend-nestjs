@@ -2190,10 +2190,10 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-nestlogged@^2.2.8:
-  version "2.2.8"
-  resolved "https://registry.yarnpkg.com/nestlogged/-/nestlogged-2.2.8.tgz#b53db1bc16d46b023c6c65bf023cdc1fc16fd7e9"
-  integrity sha512-uCaeNUAJKNxf3gveH8dH/FBGEfC6mNLb+D3QJQLopEEOR2Q43uNgqTzwYR6lTICIThG7BN3WS7XSqa5IV+aJQA==
+nestlogged@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/nestlogged/-/nestlogged-3.0.0.tgz#178f2fab2926ee6484865a7cf121e16b502aa1fa"
+  integrity sha512-1jfxnUR2QVH+9r6UnmklaW45bhpl/A3kvqA8VYjHVkuAoOKp1mRgGYnqIFElLXnGAl+mfRS14yzGEBU7AgRrfw==
   dependencies:
     "@nestjs/common" "^10.2.8"
     hyperid "^3.1.1"
