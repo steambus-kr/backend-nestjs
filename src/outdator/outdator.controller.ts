@@ -20,7 +20,7 @@ export class OutdatorController {
 
   @Get('/dispatch')
   async dispatch(@Headers('X-ADMIN-KEY') key: string) {
-    if (!key || key !== this.config.get<string>('X-ADMIN-KEY'))
+    if (!key || key !== this.config.get<string>('ADMIN_KEY'))
       throw new UnauthorizedException();
     this.schedulerRegistry.getCronJob('outdator').start();
     return {
