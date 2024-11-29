@@ -10,7 +10,7 @@ export interface IAppDetails {
 export interface IAppDetailsData {
   name: string;
   short_description: string;
-  genres?: { id: number; description: string }[];
+  genres?: { id: `${number}`; description: string }[];
   header_image: string;
   release_date: {
     coming_soom: boolean;

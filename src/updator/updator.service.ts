@@ -346,8 +346,8 @@ export class UpdatorService {
             ? {
                 connectOrCreate: appDetails.genres.map(
                   ({ id, description }) => ({
-                    where: { genre_id: id },
-                    create: { genre_id: id, genre_name: description },
+                    where: { genre_id: parseInt(id) },
+                    create: { genre_id: parseInt(id), genre_name: description },
                   }),
                 ),
               }
