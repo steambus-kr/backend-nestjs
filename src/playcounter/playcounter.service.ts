@@ -27,12 +27,12 @@ export class PlayerCounterService {
   @LoggedFunction({ skipCallLog: true, skipReturnLog: true })
   async getPlayerCount(
     appid: number,
-    retryCount: number,
+    retry: { count: number } | null,
     @InjectLogger logger: ScopedLogger,
   ): Promise<IPlayerCountResponse> {
-    if (retryCount > MAX_RETRY) {
+    if (retry && retry.count > MAX_RETRY) {
       logger.error(
-        `App ${appid}'s Maximum retry (${retryCount}/${MAX_RETRY}) reached, breaking chain`,
+        `App ${appid}'s Maximum retry (${retry.count}/${MAX_RETRY}) reached, breaking chain`,
       );
       throw new MaxRetryException();
     }
@@ -54,7 +54,11 @@ export class PlayerCounterService {
           await new Promise((r) => {
             setTimeout(r, STEAM_RATE_LIMIT_COOLDOWN[response.status]);
           });
-          return await this.getPlayerCount(appid, retryCount + 1, logger);
+          return await this.getPlayerCount(
+            appid,
+            retry ? { count: retry.count + 1 } : { count: 0 },
+            logger,
+          );
         default:
           logger.error(
             `Failed to fetch PlayerCount of ${appid} by ${response.status}`,
@@ -137,7 +141,7 @@ export class PlayerCounterService {
         await Promise.all(
           chunk.map(async (appId) => {
             return await (async () => {
-              return await this.getPlayerCount(appId, 0, logger);
+              return await this.getPlayerCount(appId, null, logger);
             })().catch(() => {
               status.failure++;
               chunkStatus.failure++;
