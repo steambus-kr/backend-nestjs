@@ -143,6 +143,7 @@ export class OutdatorService {
     }
     this.running = true;
     const startTime = performance.now();
+    const startDate = new Date();
 
     const lastFetched = await this.getLastTime(logger);
 
@@ -180,7 +181,7 @@ export class OutdatorService {
           id: this.appStateId,
         },
         data: {
-          last_fetched_info: new Date(),
+          last_fetched_info: startDate,
         },
       });
     } catch (e) {
