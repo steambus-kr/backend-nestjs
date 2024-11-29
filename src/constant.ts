@@ -1,0 +1,22 @@
+const TIME = {
+  MILLISECOND: 1,
+} as {
+  MILLISECOND: number;
+  SECOND: number;
+  MINUTE: number;
+  HOUR: number;
+  DAY: number;
+  WEEK: number;
+  MONTH: number;
+  YEAR: number;
+};
+TIME.SECOND = TIME.MILLISECOND * 1000;
+TIME.MINUTE = TIME.SECOND * 60;
+TIME.HOUR = TIME.MINUTE * 60;
+TIME.DAY = TIME.HOUR * 24;
+TIME.WEEK = TIME.DAY * 7;
+TIME.MONTH = TIME.DAY * 30;
+TIME.YEAR = TIME.DAY * 365;
+export { TIME };
+
+export const STEAM_RATE_LIMIT_COOLDOWN = 10 * TIME.MINUTE;
