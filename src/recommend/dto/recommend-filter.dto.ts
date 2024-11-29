@@ -1,4 +1,5 @@
-import { IsOptional, IsPositive } from 'class-validator';
+import { IsOptional, IsPositive, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class RecommendFilterDto {
   @IsOptional()
@@ -31,4 +32,14 @@ export class RecommendFilterDto {
 
   @IsOptional()
   genre?: string;
+}
+
+export class RecommendBodyDto {
+  @IsPositive({ each: true })
+  @IsOptional()
+  exclude: number[] = [];
+
+  @ValidateNested()
+  @Type(() => RecommendFilterDto)
+  filter: RecommendFilterDto = new RecommendFilterDto();
 }

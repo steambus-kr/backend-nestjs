@@ -9,6 +9,7 @@ export class RecommendService {
   constructor(private db: PrismaService) {}
 
   async buildFilter(
+    exclude: number[],
     filter: Partial<RecommendFilter>,
     @InjectLogger logger: ScopedLogger,
   ): Promise<Prisma.GameWhereInput> {
@@ -48,6 +49,11 @@ export class RecommendService {
         some: {
           genre_name: filter.genre,
         },
+      };
+    }
+    if (exclude.length > 0) {
+      filterObj.app_id = {
+        notIn: exclude,
       };
     }
 

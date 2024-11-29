@@ -4,13 +4,8 @@ import {
   LoggedController,
   ScopedLogger,
 } from 'nestlogged';
-import {
-  BadRequestException,
-  Body,
-  NotFoundException,
-  Post,
-} from '@nestjs/common';
-import { RecommendFilterDto } from './dto/recommend-filter.dto';
+import { Body, NotFoundException, Post } from '@nestjs/common';
+import { RecommendBodyDto } from './dto/recommend-filter.dto';
 import { RecommendService } from './recommend.service';
 
 @LoggedController('game')
@@ -19,11 +14,14 @@ export class RecommendController {
 
   @Post('/recommend')
   async getGameRecommendation(
-    @Logged('filter') @Body() filter: RecommendFilterDto,
+    @Logged('body') @Body() body: RecommendBodyDto,
     @InjectLogger logger: ScopedLogger,
   ) {
-    if (typeof filter !== 'object') filter = {};
-    const query = await this.recommendService.buildFilter(filter, logger);
+    const query = await this.recommendService.buildFilter(
+      body.exclude,
+      body.filter,
+      logger,
+    );
     const gameId = await this.recommendService.getRandomAppId(query, logger);
     if (!gameId) throw new NotFoundException();
     const content = await this.recommendService.getGameInfo(gameId, logger);
