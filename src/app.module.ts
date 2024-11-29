@@ -6,9 +6,17 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { OutdatorModule } from './outdator/outdator.module';
 import { UpdatorModule } from './updator/updator.module';
 import { PlaycounterModule } from './playcounter/playcounter.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ScheduleModule.forRoot(), RecommendModule, OutdatorModule, UpdatorModule, PlaycounterModule],
+  imports: [
+    ScheduleModule.forRoot(),
+    ConfigModule.forRoot(),
+    RecommendModule,
+    OutdatorModule,
+    UpdatorModule,
+    PlaycounterModule,
+  ],
   controllers: [AppController],
   providers: [PrismaService],
 })
