@@ -26,3 +26,8 @@ export function formatMs(ms: number): string {
   str.push(`${asSecond}s`);
   return str.join(' ');
 }
+
+export function round(num: number, digit: number): number {
+  const pow = Math.pow(10, digit);
+  return Math.round(num * pow) / pow;
+}
