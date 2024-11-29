@@ -21,6 +21,7 @@
     "@nestjs/platform-fastify": "^10.4.11",
     "@nestjs/schedule": "^4.1.1",
     "@prisma/client": "^6.0.0",
+    "class-validator": "^0.14.1",
     "nestlogged": "3.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
