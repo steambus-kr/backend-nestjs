@@ -14,6 +14,7 @@ export function formatMs(ms: number): string {
   const asHour = (ms % TIME.DAY) / TIME.HOUR;
   const asMinute = (ms % TIME.HOUR) / TIME.MINUTE;
   const asSecond = (ms % TIME.MINUTE) / TIME.SECOND;
+  const asMillisecond = ms % TIME.SECOND;
   if (asDay >= 1) {
     str.push(`${Math.floor(asDay)}d`);
   }
@@ -23,7 +24,10 @@ export function formatMs(ms: number): string {
   if (asMinute >= 1) {
     str.push(`${Math.floor(asMinute)}m`);
   }
-  str.push(`${asSecond}s`);
+  if (asSecond >= 1) {
+    str.push(`${Math.floor(asSecond)}s`);
+  }
+  str.push(`${asMillisecond}ms`);
   return str.join(' ');
 }
 
