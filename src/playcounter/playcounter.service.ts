@@ -114,9 +114,6 @@ export class PlayerCounterService {
     const maxChunk = await this.getMaxChunk(logger);
 
     for (let idx = 0; idx <= maxChunk; idx++) {
-      const chunkReporter = setInterval(() => {
-        logger.log(`Processing chunk ${idx}`);
-      }, 10000);
       const result = (
         await Promise.all(
           (await this.getChunk(idx, logger)).map(async (appId) => {
@@ -134,7 +131,6 @@ export class PlayerCounterService {
         })),
       });
       logger.log(`Chunk ${idx} done, ${result.length} games updated`);
-      clearInterval(chunkReporter);
     }
 
     this.running = false;
