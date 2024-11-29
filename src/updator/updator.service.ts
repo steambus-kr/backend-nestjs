@@ -8,7 +8,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { IAppDetailsBody, IAppDetailsData } from './types/appdetail.interface';
 import { MaxRetryException } from '../exceptions/maxretry.exception';
-import { STEAM_RATE_LIMIT_COOLDOWN } from '../constant';
+import { STEAM_RATE_LIMIT_COOLDOWN, TIME } from '../constant';
 import { FetchException } from '../exceptions/fetch.exception';
 import { BodyFailException } from '../exceptions/bodyfail.exception';
 import { JsonException } from '../exceptions/json.exception';
@@ -19,11 +19,12 @@ import { calculateRatio, formatMs, round } from '../utility';
 import { Game } from '@prisma/client';
 
 const MAX_RETRY = 3;
-const MAX_CHUNK_PER_CALL = 3;
-const APP_PER_CHUNK = 100;
+const MAX_CHUNK_PER_CALL = 6;
+const APP_PER_CHUNK = 50;
 // 1H CALL
 // 300 APP PER 1H
 // 7200 APP PER 1D (max)
+const CHUNK_BETWEEN_DELAY = 5 * TIME.MINUTE;
 
 export function isKnownException(e: Error): boolean {
   return (
@@ -426,6 +427,7 @@ export class UpdatorService {
         `Chunk ${i + 1} / ${maxChunk} done (${Math.round(((i + 1) / maxChunk) * 100)}%), ${chunkStatus.success} games updated
         ${JSON.stringify(chunkStatus, null, 2)}`,
       );
+      await new Promise((r) => setTimeout(r, CHUNK_BETWEEN_DELAY));
     }
 
     const elapsedTime = performance.now() - startTime;
