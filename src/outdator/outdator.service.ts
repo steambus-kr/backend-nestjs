@@ -111,7 +111,9 @@ export class OutdatorService {
           logger.warn(
             `Rate limited GetAppList, status=${GetAppList.status}, retrying`,
           );
-          await new Promise((r) => setTimeout(r, STEAM_RATE_LIMIT_COOLDOWN));
+          await new Promise((r) =>
+            setTimeout(r, STEAM_RATE_LIMIT_COOLDOWN[GetAppList.status]),
+          );
           return await this.getAppListIteration(
             lastFetched,
             lastAppId,

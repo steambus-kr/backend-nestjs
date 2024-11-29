@@ -51,7 +51,7 @@ export class PlayerCounterService {
             `Rate limited GetNumberOfCurrentPlayer of ${appid}, by ${response.status}, will be retried`,
           );
           await new Promise((r) => {
-            setTimeout(r, STEAM_RATE_LIMIT_COOLDOWN);
+            setTimeout(r, STEAM_RATE_LIMIT_COOLDOWN[response.status]);
           });
           return await this.getPlayerCount(appid, retryCount + 1, logger);
         default:
@@ -105,7 +105,7 @@ export class PlayerCounterService {
   }
 
   @LoggedFunction
-  @Cron('0 0 * * * *')
+  @Cron('0 */30 * * * *')
   async playerCounter(@InjectLogger logger: ScopedLogger) {
     if (this.running) {
       logger.warn(`Failed to start cron, already running`);
