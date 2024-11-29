@@ -115,7 +115,7 @@ export class OutdatorService {
           return await this.getAppListIteration(
             lastFetched,
             lastAppId,
-            retry,
+            retry ? { count: retry.count + 1 } : { count: 0 },
             logger,
           );
         default:
