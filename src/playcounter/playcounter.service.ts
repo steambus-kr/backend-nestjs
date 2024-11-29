@@ -112,14 +112,34 @@ export class PlayerCounterService {
 
     const date = new Date();
     const maxChunk = await this.getMaxChunk(logger);
+    const status: {
+      total: number;
+      success: number;
+      failure: number;
+    } = {
+      total: 0,
+      success: 0,
+      failure: 0,
+    };
 
     for (let idx = 0; idx <= maxChunk; idx++) {
+      const chunk = await this.getChunk(idx, logger);
+      const chunkStatus: typeof status = {
+        total: chunk.length,
+        success: 0,
+        failure: 0,
+      };
+      status.total += chunk.length;
       const result = (
         await Promise.all(
-          (await this.getChunk(idx, logger)).map(async (appId) => {
+          chunk.map(async (appId) => {
             return await (async () => {
               return await this.getPlayerCount(appId, 0, logger);
-            })().catch(() => null);
+            })().catch(() => {
+              status.failure++;
+              chunkStatus.failure++;
+              return null;
+            });
           }),
         )
       ).filter((r) => r !== null);
@@ -130,9 +150,18 @@ export class PlayerCounterService {
           date,
         })),
       });
-      logger.log(`Chunk ${idx} done, ${result.length} games updated`);
+      chunkStatus.success += result.length;
+      status.success += result.length;
+      logger.log(
+        `Chunk ${idx} / ${maxChunk} done (${Math.round((idx / maxChunk) * 100)}%), ${result.length} games updated
+        ${JSON.stringify(chunkStatus, null, 2)}`,
+      );
     }
 
+    logger.log(
+      `Successfully done, ${maxChunk} chunk saved
+      ${JSON.stringify(status, null, 2)}`,
+    );
     this.running = false;
   }
 }
