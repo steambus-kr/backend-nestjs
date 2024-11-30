@@ -24,7 +24,7 @@ NodeJS + NestJS를 사용합니다.
 ## 배포
 
 - 최소 1GB 이상의 램을 필요로 합니다.
-  - 기본적으로 약 500MB의 램을 사용하며, Cronjob의 실행에 따라 달라질 수 있습니다.
+  - 기본적으로 약 400-500MB의 램을 사용하며, Cronjob의 실행에 따라 달라질 수 있습니다.
 
 1. `yarn install`로 패키지를 설치합니다.
 2. `yarn prisma migrate deploy`로 PrismaORM을 이용해 MariaDB 환경을 구축합니다.
