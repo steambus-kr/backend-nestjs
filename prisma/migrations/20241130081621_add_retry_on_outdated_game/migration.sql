@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `OutdatedGame` ADD COLUMN `retry` INTEGER NOT NULL DEFAULT 0;
