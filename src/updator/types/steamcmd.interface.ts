@@ -6,5 +6,5 @@ export interface ISteamCMDBody<N extends number> {
 }
 
 export interface ISteamCMDData {
-  common: { steam_release_date?: `${number}` };
+  common?: { steam_release_date?: `${number}` };
 }

@@ -250,7 +250,7 @@ export class UpdatorService {
   ): Promise<Game> {
     try {
       const releaseDateAsInt = parseInt(
-        steamCMD.common.steam_release_date as `${number}`,
+        steamCMD.common?.steam_release_date as `${number}`,
       );
 
       return {
@@ -284,7 +284,7 @@ export class UpdatorService {
   ): Promise<Partial<Game>> {
     try {
       const releaseDateAsInt = steamCMD
-        ? parseInt(steamCMD.common.steam_release_date as `${number}`)
+        ? parseInt(steamCMD.common?.steam_release_date as `${number}`)
         : NaN;
 
       return {
