@@ -74,6 +74,7 @@ export class UpdatorService {
         },
         orderBy: {
           added_time: 'asc', // older first
+          retry: 'asc', // fewer retry first
         },
         skip: idx * APP_PER_CHUNK,
         take: APP_PER_CHUNK,
@@ -320,7 +321,24 @@ export class UpdatorService {
       });
     } catch (e) {
       logger.error(`Failed to mark ${appId} as fresh:\n${e}`);
-      throw e;
+    }
+  }
+
+  @LoggedFunction({ skipCallLog: true, skipReturnLog: true })
+  async markRetry(appId: number, @InjectLogger logger: ScopedLogger) {
+    try {
+      await this.db.outdatedGame.update({
+        where: {
+          app_id: appId,
+        },
+        data: {
+          retry: {
+            increment: 1,
+          },
+        },
+      });
+    } catch (e) {
+      logger.error(`Failed to increment retry count of outdatedGame ${appId}`);
     }
   }
 
@@ -381,6 +399,7 @@ export class UpdatorService {
               );
               status.failure++;
               chunkStatus.failure++;
+              await this.markRetry(appId, logger);
               return;
             }
             try {
@@ -403,6 +422,7 @@ export class UpdatorService {
               logger.error(`Failed to update game ${appId}:\n${e}`);
               status.failure++;
               chunkStatus.failure++;
+              await this.markRetry(appId, logger);
               return;
             }
           } else {
@@ -431,6 +451,7 @@ export class UpdatorService {
               logger.error(`Failed to upsert game ${appId}:\n${e}`);
               status.failure++;
               chunkStatus.failure++;
+              await this.markRetry(appId, logger);
               return;
             }
           }
