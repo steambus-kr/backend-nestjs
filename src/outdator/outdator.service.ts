@@ -18,6 +18,7 @@ export class OutdatorService {
   /* env */
   steamKey: string;
   appStateId: number;
+  disableOutdateGame: boolean;
 
   constructor(
     private db: PrismaService,
@@ -25,11 +26,13 @@ export class OutdatorService {
   ) {
     const steamKey = this.config.get<string>('STEAM_KEY');
     const appStateId = this.config.get<string>('APP_STATE_ID');
+    const disableOutdateGame = this.config.get<string>('DISABLE_OUTDATE_GAME');
     if (!steamKey) throw new Error('STEAM_KEY not set.');
     if (!appStateId) throw new Error('APP_STATE_ID not set.');
 
     this.steamKey = steamKey;
     this.appStateId = parseInt(appStateId);
+    this.disableOutdateGame = disableOutdateGame === 'true';
   }
 
   async getLastTime(@InjectLogger logger: ScopedLogger): Promise<Date | null> {
@@ -128,6 +131,9 @@ export class OutdatorService {
 
   @Cron('0 0 0 * * *', { name: 'outdator', timeZone: 'Asia/Seoul' })
   async outdator(@InjectLogger logger: ScopedLogger) {
+    if (this.disableOutdateGame) {
+      return;
+    }
     if (this.running) {
       logger.warn(`Failed to start cron, already running`);
       return;

@@ -17,6 +17,7 @@ import { ISteamSpy } from './types/steamspy.interface';
 import { Cron } from '@nestjs/schedule';
 import { calculateRatio, formatMs, round } from '../utility';
 import { Game } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
 
 const MAX_RETRY = 3;
 const MAX_CHUNK_PER_CALL = 4;
@@ -39,7 +40,19 @@ export function isKnownException(e: Error): boolean {
 export class UpdatorService {
   running: boolean = false;
 
-  constructor(private db: PrismaService) {}
+  /* env */
+  disableFetchGameInfo: boolean;
+
+  constructor(
+    private db: PrismaService,
+    private config: ConfigService,
+  ) {
+    const disableFetchGameInfo = this.config.get<string>(
+      'DISABLE_FETCH_GAME_INFO',
+    );
+
+    this.disableFetchGameInfo = disableFetchGameInfo === 'true';
+  }
 
   async getMaxChunk(@InjectLogger logger: ScopedLogger): Promise<number> {
     const max = Math.min(

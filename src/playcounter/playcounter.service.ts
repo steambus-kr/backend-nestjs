@@ -25,15 +25,20 @@ export class PlayerCounterService {
 
   /* env */
   appStateId: number;
+  disableFetchPlayerCount: boolean;
 
   constructor(
     private db: PrismaService,
     private config: ConfigService,
   ) {
     const appStateId = this.config.get<string>('APP_STATE_ID');
+    const disableFetchPlayerCount = this.config.get<string>(
+      'DISABLE_FETCH_PLAYER_COUNT',
+    );
     if (!appStateId) throw new Error('APP_STATE_ID not set.');
 
     this.appStateId = parseInt(appStateId);
+    this.disableFetchPlayerCount = disableFetchPlayerCount === 'true';
   }
 
   async getLastTime(@InjectLogger logger: ScopedLogger) {
