@@ -38,6 +38,12 @@ export class RecommendService {
         lte: filter.positive_review_max,
       };
     }
+    if (filter.negative_review_min || filter.negative_review_max) {
+      filterObj.review_negative = {
+        gte: filter.negative_review_min,
+        lte: filter.negative_review_max,
+      };
+    }
     if (filter.review_ratio_min || filter.review_ratio_max) {
       filterObj.review_ratio = {
         gte: filter.review_ratio_min,
