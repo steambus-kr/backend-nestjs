@@ -443,7 +443,10 @@ export class UpdatorService {
         `Chunk ${i + 1} / ${maxChunk} done (${Math.round(((i + 1) / maxChunk) * 100)}%), ${chunkStatus.success} games updated
         ${JSON.stringify(chunkStatus, null, 2)}`,
       );
-      await new Promise((r) => setTimeout(r, CHUNK_BETWEEN_DELAY));
+      if (i !== maxChunk) {
+        // skip on last
+        await new Promise((r) => setTimeout(r, CHUNK_BETWEEN_DELAY));
+      }
     }
 
     const elapsedTime = performance.now() - startTime;
