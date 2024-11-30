@@ -30,7 +30,7 @@ export class OutdatorController {
   async health(@InjectLogger logger: ScopedLogger) {
     const time = await this.service.getLastTime(logger);
     if (!time) throw new InternalServerErrorException();
-    if (time.getTime() < new Date().getTime() - TIME.DAY + TIME.HOUR * 2) {
+    if (time.getTime() < new Date().getTime() - TIME.DAY - TIME.HOUR * 2) {
       throw new InternalServerErrorException();
     }
     return {
