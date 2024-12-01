@@ -16,19 +16,11 @@ export class RecommendFilterDto {
 
   @IsOptional()
   @IsPositive()
-  positive_review_min?: number;
+  review_min?: number;
 
   @IsOptional()
   @IsPositive()
-  positive_review_max?: number;
-
-  @IsOptional()
-  @IsPositive()
-  negative_review_min?: number;
-
-  @IsOptional()
-  @IsPositive()
-  negative_review_max?: number;
+  review_max?: number;
 
   @IsOptional()
   @IsPositive()
