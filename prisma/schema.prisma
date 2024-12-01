@@ -24,6 +24,7 @@ model Game {
   thumbnail_src   String
   review_positive Int
   review_negative Int
+  review_total    Int?
   review_ratio    Float?
 }
 
