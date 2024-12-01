@@ -267,6 +267,7 @@ export class UpdatorService {
         ),
         review_positive: steamSpy.positive,
         review_negative: steamSpy.negative,
+        review_total: steamSpy.positive + steamSpy.negative,
         review_ratio: calculateRatio(steamSpy.positive, steamSpy.negative),
       };
     } catch (e) {
@@ -301,6 +302,9 @@ export class UpdatorService {
           : undefined,
         review_positive: steamSpy?.positive,
         review_negative: steamSpy?.negative,
+        review_total: steamSpy
+          ? steamSpy.positive + steamSpy.negative
+          : undefined,
         review_ratio: steamSpy
           ? calculateRatio(steamSpy.positive, steamSpy.negative)
           : undefined,
