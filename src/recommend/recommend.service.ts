@@ -4,13 +4,15 @@ import { Prisma } from '@prisma/client';
 import { RecommendFilter } from './types/recommend-filter.interface';
 import { calculateRatio } from '../utility';
 
+type ExcludedPartial<T, K extends keyof T> = Partial<Omit<T, K>> & Pick<T, K>;
+
 @LoggedInjectable()
 export class RecommendService {
   constructor(private db: PrismaService) {}
 
   async buildFilter(
     exclude: number[],
-    filter: Partial<RecommendFilter>,
+    filter: ExcludedPartial<RecommendFilter, 'reviews'>,
     @InjectLogger logger: ScopedLogger,
   ): Promise<Prisma.GameWhereInput> {
     const filterObj: Prisma.GameWhereInput = {};
@@ -32,29 +34,43 @@ export class RecommendService {
         gte: filter.owner_min,
       };
     }
-    if (filter.review_min || filter.review_max) {
-      filterObj.review_total = {
-        gte: filter.review_min,
-        lte: filter.review_max,
-      };
-    }
-    if (filter.review_positive_min || filter.review_positive_max) {
-      filterObj.review_positive = {
-        gte: filter.review_positive_min,
-        lte: filter.review_positive_max,
-      };
-    }
-    if (filter.review_negative_min || filter.review_negative_max) {
-      filterObj.review_negative = {
-        gte: filter.review_negative_min,
-        lte: filter.review_negative_max,
-      };
-    }
-    if (filter.review_ratio_min || filter.review_ratio_max) {
-      filterObj.review_ratio = {
-        gte: filter.review_ratio_min,
-        lte: filter.review_ratio_max,
-      };
+    if (filter.reviews.length > 0) {
+      const orFilter: Prisma.GameWhereInput[] = [];
+      for (const reviewFilter of filter.reviews) {
+        const orInstance: Prisma.GameWhereInput = {};
+        if (reviewFilter.review_min || reviewFilter.review_max) {
+          orInstance.review_total = {
+            gte: reviewFilter.review_min,
+            lte: reviewFilter.review_max,
+          };
+        }
+        if (
+          reviewFilter.review_positive_min ||
+          reviewFilter.review_positive_max
+        ) {
+          orInstance.review_positive = {
+            gte: reviewFilter.review_positive_min,
+            lte: reviewFilter.review_positive_max,
+          };
+        }
+        if (
+          reviewFilter.review_negative_min ||
+          reviewFilter.review_negative_max
+        ) {
+          orInstance.review_negative = {
+            gte: reviewFilter.review_negative_min,
+            lte: reviewFilter.review_negative_max,
+          };
+        }
+        if (reviewFilter.review_ratio_min || reviewFilter.review_ratio_max) {
+          orInstance.review_ratio = {
+            gte: reviewFilter.review_ratio_min,
+            lte: reviewFilter.review_ratio_max,
+          };
+        }
+        orFilter.push(orInstance);
+      }
+      filterObj.OR = orFilter;
     }
     if (filter.genre) {
       filterObj.genres = {
